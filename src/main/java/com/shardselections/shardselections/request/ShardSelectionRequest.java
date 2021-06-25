@@ -2,6 +2,8 @@ package com.shardselections.shardselections.request;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * @author yashasvi
  */
@@ -10,6 +12,6 @@ import lombok.Data;
 public class ShardSelectionRequest {
 
     private String algorithm;
-    private Object search_query;
+    private Map search_query;
     private String indexName;
 }

@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import shardSelectionAlgorithms.HybridShardSelectionAlgorithm;
 import shardSelectionAlgorithms.RankS;
 import shardSelectionAlgorithms.ReDDE;
 import shardSelectionAlgorithms.Sushi;
+
+import java.util.Map;
 
 /**
  * @author yashasvi
@@ -22,9 +23,6 @@ import shardSelectionAlgorithms.Sushi;
 @Log4j2
 public class ShardSelectionService {
 
-    @Autowired
-    String clusterInfo;
-
     public ResponseEntity<Object> selectShardAndExecuteQuery(ShardSelectionRequest shardSelectionRequest) {
 
 
@@ -32,25 +30,20 @@ public class ShardSelectionService {
 
             log.info("algorithm = "+ shardSelectionRequest.getAlgorithm());
 
-            long start = System.currentTimeMillis();
-
             ResourceSelection selection = getShardSelectionService(shardSelectionRequest.getAlgorithm());
 
-            double documentScore = selection.getDocumentScore(getCSINumber(shardSelectionRequest.getSearch_query().toString()));
-
-            log.info("documentScore = " + documentScore);
-
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Object> clusterResponse =  restTemplate.postForEntity(clusterInfo + "/" + (shardSelectionRequest.getIndexName() == null?"" : shardSelectionRequest.getIndexName() + "/_search"), shardSelectionRequest.getSearch_query(), Object.class);
-
-            long end = System.currentTimeMillis();
-            long elapsedTime = end - start;
-            log.info("elapsedTime = " + elapsedTime);
+            Map<String, Object> documentInfos = selection.getDocumentResponseScoreAndTime(shardSelectionRequest.getIndexName(),
+                    shardSelectionRequest.getSearch_query(), true);
 
             ShardSelectionResponse shardSelectionResponse = new ShardSelectionResponse();
-            shardSelectionResponse.setDocumentScore(documentScore);
-            shardSelectionResponse.setTimeElapsed(elapsedTime);
-            shardSelectionResponse.setResponse(clusterResponse);
+            shardSelectionResponse.setDocumentScore((Double) documentInfos.get("documentScore"));
+            shardSelectionResponse.setTimeElapsed((Long) documentInfos.get("elapsedTime"));
+
+            shardSelectionResponse.setResponse(documentInfos.get("response"));
+
+            log.info("Document Score = " + documentInfos.get("documentScore"));
+            log.info("Elapsed Time = " + documentInfos.get("elapsedTime"));
+            log.info("----------------------------------------------------------------------");
 
             return new ResponseEntity<>(shardSelectionResponse, HttpStatus.ACCEPTED);
 
@@ -78,19 +71,4 @@ public class ShardSelectionService {
         }
         return null;
     }
-
-    private int getCSINumber(String query) {
-
-        int size = query.length();
-
-        if(query.length() < 92) {
-            return size *10;
-        }
-
-        else if(query.length() > 5000){
-            return size/10;
-        }
-        return  size;
-    }
-
 }
