@@ -41,7 +41,7 @@ public class ShardSelectionService {
 
             shardSelectionResponse.setResponse(documentInfos.get("response"));
 
-            log.info("Document Score = " + documentInfos.get("documentScore"));
+            log.info("Average Document Score = " + documentInfos.get("documentScore"));
             log.info("Elapsed Time = " + documentInfos.get("elapsedTime"));
             log.info("----------------------------------------------------------------------");
 
