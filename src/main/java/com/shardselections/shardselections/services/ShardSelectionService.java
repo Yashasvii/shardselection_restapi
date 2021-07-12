@@ -4,7 +4,6 @@ import abstractEntity.ResourceSelection;
 import com.shardselections.shardselections.request.ShardSelectionRequest;
 import com.shardselections.shardselections.response.ShardSelectionResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,10 +29,13 @@ public class ShardSelectionService {
 
             log.info("algorithm = "+ shardSelectionRequest.getAlgorithm());
 
+            int maxShard = shardSelectionRequest.getMaxShards();
+            int totalShard = shardSelectionRequest.getTotalShards();
+
             ResourceSelection selection = getShardSelectionService(shardSelectionRequest.getAlgorithm());
 
             Map<String, Object> documentInfos = selection.getDocumentResponseScoreAndTime(shardSelectionRequest.getIndexName(),
-                    shardSelectionRequest.getSearch_query(), true);
+                    shardSelectionRequest.getSearch_query(), true, maxShard, totalShard);
 
             ShardSelectionResponse shardSelectionResponse = new ShardSelectionResponse();
             shardSelectionResponse.setDocumentScore((Double) documentInfos.get("documentScore"));
