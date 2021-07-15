@@ -35,7 +35,7 @@ public class ShardSelectionService {
             ResourceSelection selection = getShardSelectionService(shardSelectionRequest.getAlgorithm());
 
             Map<String, Object> documentInfos = selection.getDocumentResponseScoreAndTime(shardSelectionRequest.getIndexName(),
-                    shardSelectionRequest.getSearch_query(), true, maxShard, totalShard);
+                    shardSelectionRequest.getSearch_query(), true, maxShard, totalShard, shardSelectionRequest.getAlpha());
 
             ShardSelectionResponse shardSelectionResponse = new ShardSelectionResponse();
             shardSelectionResponse.setDocumentScore((Double) documentInfos.get("documentScore"));

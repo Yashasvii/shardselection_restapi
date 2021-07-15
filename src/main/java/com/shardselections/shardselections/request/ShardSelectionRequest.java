@@ -16,4 +16,5 @@ public class ShardSelectionRequest {
     private String indexName;
     private Integer maxShards;
     private Integer totalShards;
+    private Integer alpha;
 }
