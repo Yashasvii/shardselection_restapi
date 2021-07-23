@@ -2,6 +2,7 @@ package com.shardselections.shardselections.request;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +18,5 @@ public class ShardSelectionRequest {
     private Integer maxShards;
     private Integer totalShards;
     private Integer alpha;
+    private List<String> routingFields;
 }
