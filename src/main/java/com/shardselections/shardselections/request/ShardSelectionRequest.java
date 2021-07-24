@@ -13,7 +13,7 @@ import java.util.Map;
 public class ShardSelectionRequest {
 
     private String algorithm;
-    private Map search_query;
+    private Map<String,Object> search_query;
     private String indexName;
     private Integer maxShards;
     private Integer totalShards;
