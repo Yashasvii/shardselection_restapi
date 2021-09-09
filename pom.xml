@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.shardSelections</groupId>
-    <artifactId>shardselections</artifactId>
+    <artifactId>shardselection_restapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>shardselections</name>
     <description>Shard Sleection Methods</description>

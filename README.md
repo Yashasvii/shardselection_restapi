@@ -31,3 +31,9 @@ Dataset used for experimentation is Insider Threat Test Dataset(CERT V6.2) email
 
 https://kilthub.cmu.edu/articles/dataset/Insider_Threat_Test_Dataset/12841247/1
 
+
+
+Dataset used for validation is Insider Threat Test Dataset(CERT V6.2) Shakespeare_data.csv from the site:
+
+https://www.kaggle.com/kingburrito666/shakespeare-plays
+
